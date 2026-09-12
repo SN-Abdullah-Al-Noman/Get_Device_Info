@@ -105,7 +105,7 @@ find "$EXTRACTED_FIRM_DIR"/system*/system/media -maxdepth 1 -type f -exec cp -f 
 
 
 # Generate .config
-CONFIG_FILE="$QT_DIR/OUT/STOCK_DEVICE/config"
+CONFIG_FILE="$QT_DIR/OUT/$STOCK_DEVICE/config"
 
 rm -f "$CONFIG_FILE"
 
