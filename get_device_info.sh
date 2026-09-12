@@ -12,8 +12,7 @@ else
     STOCK_HAS_AB_SLOT=FALSE
 fi
 
-# Extract firmware
-EXTRACT_SUPER_IMG "$FIRM_DIR"
+# Extract firmware img
 EXTRACT_FIRMWARE_IMG "$FIRM_DIR" "all"
 
 INSTALL_FRAMEWORK \
