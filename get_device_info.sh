@@ -111,9 +111,6 @@ USE_ALT_SDHMS_APP=True
 STOCK_DEVICE_CHIPSET=
 SDHMS_MAX_SUPPORTED_OS_SDK=40
 
-rm -rf "$FIRM_DIR"
-mkdir -p "$FIRM_DIR"
-
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 
