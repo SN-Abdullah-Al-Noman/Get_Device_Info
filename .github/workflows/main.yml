@@ -88,13 +88,6 @@ jobs:
           echo "Creating ZIP: $ZIP_NAME"
           zip -r "$ZIP_NAME" "$STOCK_DEVICE"
           echo "ZIP_FILE=$OUT_DIR/$ZIP_NAME" >> "$GITHUB_ENV"
-          ls -lh "$ZIP_NAME"
-
-      - name: Upload Device Info to Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "${{ env.STOCK_DEVICE }}"
-          name: "${{ env.STOCK_DEVICE }} Device Info"
-          files: ${{ env.ZIP_FILE }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          echo "Uploading to GoFile..."
+          GOFILE_LINK=$(bash upload.sh "$ZIP_FILE")
+          echo "🌎 File uploaded here: $GOFILE_LINK"
