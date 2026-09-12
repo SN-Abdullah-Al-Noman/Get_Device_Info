@@ -97,4 +97,4 @@ jobs:
           name: "${{ env.STOCK_DEVICE }} Device Info"
           files: ${{ env.ZIP_FILE }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
