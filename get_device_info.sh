@@ -1,5 +1,7 @@
 #!/bin/bash
 
+EXTRACTED_FIRM_DIR="$FIRM_DIR/$STOCK_DEVICE"
+
 if compgen -G "$EXTRACTED_FIRM_DIR/system_ext*.img" > /dev/null; then
     STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
 else
@@ -13,17 +15,10 @@ else
 fi
 
 # Extract firmware img
-EXTRACT_FIRMWARE_IMG "$FIRM_DIR" "all"
+EXTRACT_FIRMWARE_IMG "$EXTRACTED_FIRM_DIR" "all"
 
-INSTALL_FRAMEWORK \
-    "$APKTOOL" \
-    "$FIRM_DIR/system/system/framework/framework-res.apk"
-
-DECOMPILE \
-    "$APKTOOL" \
-    "$FIRM_DIR/system/system/framework" \
-    "$FIRM_DIR/system/system/framework/ssrm.jar" \
-    "$WORK_DIR"
+INSTALL_FRAMEWORK "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework/framework-res.apk"
+DECOMPILE "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework" "$EXTRACTED_FIRM_DIR/system/system/framework/ssrm.jar" "$WORK_DIR"
 
 
 GET_SIOP_DVFS_FILE_NAME() {
@@ -59,7 +54,7 @@ GET_SIOP_DVFS_FILE_NAME() {
 
 
 # Get info
-GET_SIOP_DVFS_FILE_NAME "$FIRM_DIR"
+GET_SIOP_DVFS_FILE_NAME "$EXTRACTED_FIRM_DIR"
 
 STOCK_VNDK_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.build.version.sdk")
 STOCK_DEVICE_CPU_ABILIST=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.product.cpu.abilist")
@@ -77,12 +72,6 @@ USE_ALT_SDHMS_APP=True
 STOCK_DEVICE_CHIPSET=
 SDHMS_MAX_SUPPORTED_OS_SDK=40
 
-rm -rf "$OUT_DIR"
-mkdir -p "$OUT_DIR"
-
-rm -rf "$WORK_DIR"
-mkdir -p "$WORK_DIR"
-
 mkdir "$OUT_DIR/$STOCK_DEVICE"
 mkdir "$OUT_DIR/$STOCK_DEVICE/product/overlay"
 mkdir "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
@@ -92,25 +81,25 @@ mkdir "$OUT_DIR/$STOCK_DEVICE/system/lib"
 mkdir "$OUT_DIR/$STOCK_DEVICE/system/lib64"
 mkdir "$OUT_DIR/$STOCK_DEVICE/system/media"
 
-cp -r "$FIRM_DIR/product*/overlay/framework-res*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-cp -r "$FIRM_DIR/product*/overlay/SystemUI*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-cp -r "$FIRM_DIR/product*/overlay/TeleService__*__auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/framework-res*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/SystemUI*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/TeleService__*__auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
 
-cp -r "$FIRM_DIR/system*/system/cameradata/portrait_data"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$FIRM_DIR/system*/system/cameradata/singletake"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$FIRM_DIR/system*/system/cameradata/aremoji-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$FIRM_DIR/system*/system/cameradata/camera-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/portrait_data"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/singletake"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/aremoji-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/camera-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
 
-cp -r "$FIRM_DIR/system*/system/etc/init/rscmgr*.rc"  "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
-cp -r "$FIRM_DIR/system*/system/etc/permissions/com.sec.feature.sensorhub_level*.xml"  "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/etc/init/rscmgr*.rc"  "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/etc/permissions/com.sec.feature.sensorhub_level*.xml"  "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
 
-cp -r "$FIRM_DIR/system*/system/lib/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
-cp -r "$FIRM_DIR/system*/system/lib/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
 
-cp -r "$FIRM_DIR/system*/system/lib64/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
-cp -r "$FIRM_DIR/system*/system/lib64/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib64/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
+cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib64/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
 
-find "$FIRM_DIR"/system*/system/media -maxdepth 1 -type f -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
+find "$EXTRACTED_FIRM_DIR"/system*/system/media -maxdepth 1 -type f -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
 
 
 # Generate .config
