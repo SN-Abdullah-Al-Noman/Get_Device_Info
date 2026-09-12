@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$(pwd)/scripts/QuantumRom.sh"
+
 EXTRACTED_FIRM_DIR="$FIRM_DIR/$STOCK_DEVICE"
 
 if compgen -G "$EXTRACTED_FIRM_DIR/system_ext*.img" > /dev/null; then
