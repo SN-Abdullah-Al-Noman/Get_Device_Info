@@ -88,6 +88,8 @@ jobs:
           echo "Creating ZIP: $ZIP_NAME"
           zip -r "$ZIP_NAME" "$STOCK_DEVICE"
           echo "ZIP_FILE=$OUT_DIR/$ZIP_NAME" >> "$GITHUB_ENV"
+          pwd
+          ls
           echo "Uploading to GoFile..."
           GOFILE_LINK=$(bash ./upload.sh "$ZIP_FILE")
           echo "🌎 File uploaded here: $GOFILE_LINK"
