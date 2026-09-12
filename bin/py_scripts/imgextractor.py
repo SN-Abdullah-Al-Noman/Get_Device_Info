@@ -189,7 +189,7 @@ class Extractor(object):
                         try:
                             os.chown(dir_target, uid, gid)
                         except:
-                            print(f"Failed to set permission for: {dir_target}")
+                            # print(f"Failed to set permission for: {dir_target}")
                             pass
                     scan_dir(entry_inode, entry_inode_path)
                     if cap == '' and con == '':
@@ -285,7 +285,7 @@ class Extractor(object):
                         try:
                             os.chown(file_target, uid, gid)
                         except:
-                            print(f"Failed to set permission for: {file_target}")
+                            # print(f"Failed to set permission for: {file_target}")
                             pass
                     if cap == '' and con == '':
                         tmppath=self.FileName + entry_inode_path
