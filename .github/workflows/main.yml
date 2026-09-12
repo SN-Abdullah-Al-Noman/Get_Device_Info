@@ -59,7 +59,7 @@ jobs:
       - name: Download firmware ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
-          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$STOCK_FW_VERSION"
+          # DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$STOCK_FW_VERSION"
 
       - name: Extract firmware
         run: |
