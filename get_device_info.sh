@@ -62,7 +62,7 @@ STOCK_VNDK_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.build.ve
 STOCK_DEVICE_CPU_ABILIST=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.product.cpu.abilist")
 SOURCE=$(GET_PROP "$EXTRACTED_FIRM_DIR" "system" "ro.build.PDA")
 
-if compgen -G "$EXTRACTED_FIRM_DIR/system*/system/priv-app/EuiccService" > /dev/null; then
+if compgen -G "$EXTRACTED_FIRM_DIR/system/system/priv-app/EuiccService" > /dev/null; then
     STOCK_HAS_ESIM_SUPPORT=TRUE
 else
     STOCK_HAS_ESIM_SUPPORT=FALSE
@@ -83,25 +83,25 @@ mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib"
 mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib64"
 mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/media"
 
-cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/framework-res*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/SystemUI*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/TeleService__*__auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+cp -r "$EXTRACTED_FIRM_DIR/product/overlay/framework-res*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+cp -r "$EXTRACTED_FIRM_DIR/product/overlay/SystemUI*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+cp -r "$EXTRACTED_FIRM_DIR/product/overlay/TeleService__*__auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
 
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/portrait_data"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/singletake"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/aremoji-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/cameradata/camera-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/portrait_data"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/singletake"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/aremoji-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/camera-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
 
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/etc/init/rscmgr*.rc"  "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/etc/permissions/com.sec.feature.sensorhub_level*.xml"  "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/etc/init/rscmgr*.rc"  "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/etc/permissions/com.sec.feature.sensorhub_level*.xml"  "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
 
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/lib/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/lib/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
 
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib64/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
-cp -r "$EXTRACTED_FIRM_DIR/system*/system/lib64/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/lib64/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
+cp -r "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
 
-find "$EXTRACTED_FIRM_DIR"/system*/system/media -maxdepth 1 -type f -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
+find "$EXTRACTED_FIRM_DIR"/system/system/media -maxdepth 1 -type f -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
 
 
 # Generate .config
