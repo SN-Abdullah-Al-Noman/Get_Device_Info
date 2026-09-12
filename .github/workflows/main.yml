@@ -1,0 +1,50 @@
+name: Device Info Collector.
+
+on:
+  workflow_dispatch:
+    inputs:
+      STOCK_DEVICE:
+        description: "Your own device model or None"
+        required: true
+        default: "SM-A225F"
+
+      STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK:
+        description: "Input stock device CSC code or direct download link."
+        required: true
+        default: "BKD"
+
+      TARGET_FW_VERSION:
+        description: "Specific Samsung firmware version (PDA/CSC/MODEM) OR (AP/CSC/CP)"
+        required: false
+
+
+jobs:
+  build:
+    name: Start QuantumROM Tools
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v4
+
+      - name: Set variables
+        run: |
+          echo "FIRM_DIR=$(pwd)/FW" | tee -a "$GITHUB_ENV"
+          echo "OUT_DIR=$(pwd)/OUT" | tee -a "$GITHUB_ENV"
+          echo "WORK_DIR=$(pwd)/WORK" | tee -a "$GITHUB_ENV"
+          echo "APKTOOL=$(pwd)/bin/java/apktool.jar" | tee -a "$GITHUB_ENV"
+          echo "STOCK_DEVICE=${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.TARGET_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
+          echo "TARGET_FW_VERSION=${{ inputs.TARGET_FW_VERSION }}" | tee -a "$GITHUB_ENV"
+
+      - name: Download firmware ▶️ ${{ inputs.TARGET_DEVICE }} - ${{ inputs.TARGET_DEVICE_CSC_OR_DOWNLOAD_LINK }}
+        run: |
+          source "$(pwd)/scripts/QuantumRom.sh"
+          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$TARGET_FW_VERSION"
+     
+      - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.TARGET_DEVICE_CSC_OR_DOWNLOAD_LINK }} Device info.
+        run: |
+          source "$(pwd)/scripts/QuantumRom.sh"
+          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$TARGET_FW_VERSION"
+
+        
