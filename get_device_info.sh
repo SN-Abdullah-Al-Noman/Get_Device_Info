@@ -31,8 +31,8 @@ GET_SIOP_DVFS_FILE_NAME() {
         return 1
     fi
 
-    local EXTRACTED_FIRM_DIR="$1"
-    local FILE="$EXTRACTED_FIRM_DIR/smali/com/android/server/ssrm/Feature.smali"
+    local SSRM_DIR="$1"
+    local FILE="$SSRM_DIR/smali/com/android/server/ssrm/Feature.smali"
 
     if [ ! -f "$FILE" ]; then
         echo "- File name not found: $FILE"
