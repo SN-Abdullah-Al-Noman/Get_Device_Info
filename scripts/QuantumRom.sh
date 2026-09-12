@@ -691,7 +691,7 @@ DECOMPILE() {
     local BASENAME="$(basename "${FILE%.*}")"
     local OUT="$DECOMPILE_DIR/$BASENAME"
 
-    echo -e "Decompiling: $FILE"
+    echo -e "Decompiling: $FILE in $DECOMPILE_DIR"
 
 	if [ ! -f "$FILE" ]; then
         echo -e "- File not found: $FILE"
