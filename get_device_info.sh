@@ -56,7 +56,7 @@ GET_SIOP_DVFS_FILE_NAME() {
 
 
 # Get info
-GET_SIOP_DVFS_FILE_NAME "$EXTRACTED_FIRM_DIR"
+GET_SIOP_DVFS_FILE_NAME "$WORK_DIR/ssrm"
 
 STOCK_VNDK_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.build.version.sdk")
 STOCK_DEVICE_CPU_ABILIST=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.product.cpu.abilist")
