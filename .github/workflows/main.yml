@@ -64,6 +64,8 @@ jobs:
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
           EXTRACT_FIRMWARE "$FIRM_DIR/$TARGET_DEVICE"
+          cd "$FIRM_DIR/$TARGET_DEVICE"
+          ls
      
       - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }} Device info.
         run: |
