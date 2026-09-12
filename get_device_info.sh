@@ -74,14 +74,14 @@ USE_ALT_SDHMS_APP=True
 STOCK_DEVICE_CHIPSET=
 SDHMS_MAX_SUPPORTED_OS_SDK=40
 
-mkdir "$OUT_DIR/$STOCK_DEVICE"
-mkdir "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-mkdir "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-mkdir "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
-mkdir "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
-mkdir "$OUT_DIR/$STOCK_DEVICE/system/lib"
-mkdir "$OUT_DIR/$STOCK_DEVICE/system/lib64"
-mkdir "$OUT_DIR/$STOCK_DEVICE/system/media"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib64"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/media"
 
 cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/framework-res*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
 cp -r "$EXTRACTED_FIRM_DIR/product*/overlay/SystemUI*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
