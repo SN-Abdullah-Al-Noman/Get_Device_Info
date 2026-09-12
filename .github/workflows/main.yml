@@ -36,6 +36,7 @@ jobs:
           echo "STOCK_DEVICE=${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
           echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
           echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
+          mkdir -p "$FIRM_DIR" "$OUT_DIR" "$WORK_DIR"
 
       - name: Check disk space
         id: disk
