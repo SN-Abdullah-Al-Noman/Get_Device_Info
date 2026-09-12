@@ -37,10 +37,28 @@ jobs:
           echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
           echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
 
+      - name: Check disk space
+        id: disk
+        run: |
+          FREE_GB=$(df -BG "$GITHUB_WORKSPACE" | awk 'NR==2 {gsub("G","",$4); print $4}')
+          echo "Free space: ${FREE_GB} GB"
+          echo "enough=$([ "$FREE_GB" -ge 50 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Remove unnecessary files.
+        if: steps.disk.outputs.enough == 'false'
+        uses: rokibhasansagar/slimhub_actions@v25.42.5
+
+      - name: Install Dependencies.
+        run: |
+          sudo apt update
+          sudo apt install -y p7zip-full lz4 liblz4-1 liblz4-dev libzstd1 libzstd-dev build-essential android-sdk-libsparse-utils \
+              f2fs-tools fuse2fs fuse e2fsprogs python3 python3-pip zipalign unzip openjdk-21-jdk jq perl xxd kmod erofs-utils curl wget
+          sudo modprobe f2fs || true
+
       - name: Download firmware ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
-          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$STOCK_FW_VERSION"
+          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR/$STOCK_DEVICE" "$STOCK_FW_VERSION"
 
       - name: Extract firmware
         run: |
