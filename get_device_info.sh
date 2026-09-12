@@ -83,25 +83,52 @@ mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib"
 mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib64"
 mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/media"
 
-cp -r "$EXTRACTED_FIRM_DIR/product/overlay/framework-res*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-cp -r "$EXTRACTED_FIRM_DIR/product/overlay/SystemUI*auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-cp -r "$EXTRACTED_FIRM_DIR/product/overlay/TeleService__*__auto_generated_rro_product.apk"  "$OUT_DIR/$STOCK_DEVICE/product/overlay"
+cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/framework-res*auto_generated_rro_product.apk \
+    "$OUT_DIR/$STOCK_DEVICE/product/overlay/"
 
-cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/portrait_data"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/singletake"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/aremoji-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-cp -r "$EXTRACTED_FIRM_DIR/system/system/cameradata/camera-feature.xml"  "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
+cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/SystemUI*auto_generated_rro_product.apk \
+    "$OUT_DIR/$STOCK_DEVICE/product/overlay/"
 
-cp -r "$EXTRACTED_FIRM_DIR/system/system/etc/init/rscmgr*.rc"  "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
-cp -r "$EXTRACTED_FIRM_DIR/system/system/etc/permissions/com.sec.feature.sensorhub_level*.xml"  "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
+cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/TeleService__*__auto_generated_rro_product.apk \
+    "$OUT_DIR/$STOCK_DEVICE/product/overlay/"
 
-cp -r "$EXTRACTED_FIRM_DIR/system/system/lib/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
-cp -r "$EXTRACTED_FIRM_DIR/system/system/lib/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib"
 
-cp -r "$EXTRACTED_FIRM_DIR/system/system/lib64/lib_SoundBooster_ver*.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
-cp -r "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legacy.so"  "$OUT_DIR/$STOCK_DEVICE/system/lib64"
+cp -rf "$EXTRACTED_FIRM_DIR/system/system/cameradata/portrait_data" \
+    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
 
-find "$EXTRACTED_FIRM_DIR"/system/system/media -maxdepth 1 -type f -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
+cp -rf "$EXTRACTED_FIRM_DIR/system/system/cameradata/singletake" \
+    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
+
+cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/aremoji-feature.xml" \
+    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
+
+cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/camera-feature.xml" \
+    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
+
+
+cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/init/rscmgr*.rc \
+    "$OUT_DIR/$STOCK_DEVICE/system/etc/init/"
+
+cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/permissions/com.sec.feature.sensorhub_level*.xml \
+    "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions/"
+
+
+cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib/lib_SoundBooster_ver*.so \
+    "$OUT_DIR/$STOCK_DEVICE/system/lib/"
+
+cp -f "$EXTRACTED_FIRM_DIR/system/system/lib/libsamsungSoundbooster_plus_legacy.so" \
+    "$OUT_DIR/$STOCK_DEVICE/system/lib/"
+
+
+cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib64/lib_SoundBooster_ver*.so \
+    "$OUT_DIR/$STOCK_DEVICE/system/lib64/"
+
+cp -f "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legacy.so" \
+    "$OUT_DIR/$STOCK_DEVICE/system/lib64/"
+
+
+find "$EXTRACTED_FIRM_DIR/system/system/media" -maxdepth 1 -type f \
+    -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
 
 
 # Generate .config
