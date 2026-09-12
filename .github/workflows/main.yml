@@ -44,7 +44,7 @@ jobs:
      
       - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.TARGET_DEVICE_CSC_OR_DOWNLOAD_LINK }} Device info.
         run: |
-          source "$(pwd)/scripts/QuantumRom.sh"
-          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$TARGET_FW_VERSION"
+          bash get_device_info.sh
+          
 
         
