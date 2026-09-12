@@ -13,7 +13,7 @@ on:
         required: true
         default: "BKD"
 
-      TARGET_FW_VERSION:
+      STOCK_FW_VERSION:
         description: "Specific Samsung firmware version (PDA/CSC/MODEM) OR (AP/CSC/CP)"
         required: false
 
@@ -34,15 +34,15 @@ jobs:
           echo "WORK_DIR=$(pwd)/WORK" | tee -a "$GITHUB_ENV"
           echo "APKTOOL=$(pwd)/bin/java/apktool.jar" | tee -a "$GITHUB_ENV"
           echo "STOCK_DEVICE=${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
-          echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.TARGET_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
-          echo "TARGET_FW_VERSION=${{ inputs.TARGET_FW_VERSION }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
 
-      - name: Download firmware ▶️ ${{ inputs.TARGET_DEVICE }} - ${{ inputs.TARGET_DEVICE_CSC_OR_DOWNLOAD_LINK }}
+      - name: Download firmware ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
-          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$TARGET_FW_VERSION"
+          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$STOCK_FW_VERSION"
      
-      - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.TARGET_DEVICE_CSC_OR_DOWNLOAD_LINK }} Device info.
+      - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }} Device info.
         run: |
           bash get_device_info.sh
           
