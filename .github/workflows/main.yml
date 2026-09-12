@@ -93,7 +93,7 @@ jobs:
       - name: Upload Device Info to Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "${{ env.STOCK_DEVICE }}-Device-Info-${{ github.run_number }}"
+          tag_name: "${{ env.STOCK_DEVICE }}"
           name: "${{ env.STOCK_DEVICE }} Device Info"
           files: ${{ env.ZIP_FILE }}
         env:
