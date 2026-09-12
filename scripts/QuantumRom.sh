@@ -278,7 +278,7 @@ EXTRACT_FIRMWARE() {
 
     local FIRM_DIR="$1"
 
-    echo -e "Extracting downloaded firmware."
+    echo -e "Extracting downloaded firmware from: $FIRM_DIR"
 
 	if [ ! -d "$FIRM_DIR" ]; then
         echo -e "- Directory not found: $FIRM_DIR"
