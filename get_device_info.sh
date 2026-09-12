@@ -1,38 +1,5 @@
 #!/bin/bash
 
-# QT DIR
-QT_DIR="$(pwd)"
-
-# Binary
-export lpmake="$QT_DIR/bin/lp/lpmake"
-export lpunpack="$QT_DIR/bin/lp/lpunpack"
-export make_ext4fs="$QT_DIR/bin/ext4/make_ext4fs"
-export samloader="$QT_DIR/bin/samloader/samloader"
-export make_f2fs="$QT_DIR/bin/f2fs-tools/mkfs.f2fs"
-export sload_f2fs="$QT_DIR/bin/f2fs-tools/sload.f2fs"
-export omc_decoder="$QT_DIR/bin/java/omc-decoder.jar"
-export mkfs_erofs="$QT_DIR/bin/erofs-utils/mkfs.erofs"
-export extract_erofs="$QT_DIR/bin/erofs-utils/extract.erofs"
-export imgextractor_py="$QT_DIR/bin/py_scripts/imgextractor.py"
-
-chmod +x "$lpmake"
-chmod +x "$lpunpack"
-chmod +x "$samloader"
-chmod +x "$make_f2fs"
-chmod +x "$sload_f2fs"
-chmod +x "$mkfs_erofs"
-chmod +x "$make_ext4fs"
-chmod +x "$extract_erofs"
-
-export FIRM_DIR="$QT_DIR/FW"
-export OUT_DIR="$QT_DIR/OUT"
-export WORK_DIR="$QT_DIR/WORK"
-export APKTOOL="$QT_DIR/bin/java/apktool.jar"
-
-source "$(pwd)/scripts/QuantumRom.sh"
-
-EXTRACT_FIRMWARE "$FIRM_DIR"
-
 if compgen -G "$EXTRACTED_FIRM_DIR/system_ext*.img" > /dev/null; then
     STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
 else
