@@ -448,7 +448,7 @@ PREPARE_PARTITIONS() {
     if [ -z "$STOCK_DEVICE" ] || [ "$STOCK_DEVICE" = "None" ]; then
         local BUILD_PARTITIONS="odm,odm_dlkm,product,system,system_ext,system_dlkm,vendor,vendor_dlkm,odm_a,odm_dlkm_a,product_a,system_a,system_ext_a,system_dlkm_a,vendor_a,vendor_dlkm_a,optics,optics_a"
 	else
-	    local BUILD_PARTITIONS="product,system_ext,system"
+	    local BUILD_PARTITIONS="odm,product,system_ext,system,vendor"
     fi
 
 	# Delete empty b slot images
