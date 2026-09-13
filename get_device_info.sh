@@ -133,6 +133,8 @@ cp -f "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legac
 find "$EXTRACTED_FIRM_DIR/system/system/media" -maxdepth 1 -type f \
     -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
 
+cp -f "$EXTRACTED_FIRM_DIR/system/system/etc/floating_feature.xml" \
+    "$OUT_DIR/$STOCK_DEVICE/"
 
 # Generate config file
 CONFIG_FILE="$QT_DIR/OUT/$STOCK_DEVICE/config"
