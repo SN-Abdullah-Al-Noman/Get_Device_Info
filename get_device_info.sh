@@ -1,5 +1,7 @@
 #!/bin/bash
 
+QT_DIR="$(pwd)"
+
 source "$(pwd)/scripts/QuantumRom.sh"
 
 EXTRACTED_FIRM_DIR="$FIRM_DIR/$STOCK_DEVICE"
@@ -139,7 +141,7 @@ cp -f "$EXTRACTED_FIRM_DIR/system/system/etc/floating_feature.xml" \
 # Generate config file
 CONFIG_FILE="$QT_DIR/OUT/$STOCK_DEVICE/config"
 
-rm -f "$CONFIG_FILE"
+rm -rf "$CONFIG_FILE"
 
 cat > "$CONFIG_FILE" <<EOF
 STOCK_VNDK_VERSION=$STOCK_VNDK_VERSION
@@ -163,3 +165,5 @@ echo "     $STOCK_DEVICE CONFIG GENERATED       "
 echo "=========================================="
 echo "- Config: $CONFIG_FILE"
 echo "=========================================="
+
+cat "$CONFIG_FILE"
