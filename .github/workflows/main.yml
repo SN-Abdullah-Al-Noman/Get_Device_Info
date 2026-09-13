@@ -86,8 +86,8 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
-          ANDROID_VERSION=$(GET_PROP "$FIRM_DIR/$TARGET_DEVICE" "system" "ro.system.build.version.release")
-          BUILD_VERSION=$(GET_PROP "$FIRM_DIR/$TARGET_DEVICE" "system" "ro.build.version.incremental")
+          ANDROID_VERSION=$(GET_PROP "$FIRM_DIR/$STOCK_DEVICE" "system" "ro.system.build.version.release")
+          BUILD_VERSION=$(GET_PROP "$FIRM_DIR/$STOCK_DEVICE" "system" "ro.build.version.incremental")
 
           ZIP_FILE="${OUT_DIR}/${STOCK_DEVICE}_OS_${ANDROID_VERSION}_${BUILD_VERSION}.zip"
           echo "Creating ZIP: ${ZIP_FILE}"
