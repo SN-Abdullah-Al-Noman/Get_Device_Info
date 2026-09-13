@@ -82,13 +82,24 @@ jobs:
           bash get_device_info.sh
 
       - name: Create Device ZIP
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
         run: |
-          ZIP_FILE="${OUT_DIR}/${STOCK_DEVICE}_info.zip"
+          source "$(pwd)/scripts/QuantumRom.sh"
+          ANDROID_VERSION=$(GET_PROP "$FIRM_DIR/$TARGET_DEVICE" "system" "ro.system.build.version.release")
+          BUILD_VERSION=$(GET_PROP "$FIRM_DIR/$TARGET_DEVICE" "system" "ro.build.version.incremental")
+
+          ZIP_FILE="${OUT_DIR}/${STOCK_DEVICE}_OS_${ANDROID_VERSION}_${BUILD_VERSION}.zip"
           echo "Creating ZIP: ${ZIP_FILE}"
           7z a -tzip "${ZIP_FILE}" "${OUT_DIR}/${STOCK_DEVICE}"/* -mx=5
           echo "ZIP_FILE=${ZIP_FILE}" | tee -a "$GITHUB_ENV"
 
           echo "Uploading to GoFile..."
           GOFILE_LINK=$(bash ./upload.sh "$ZIP_FILE")
-
           echo "🌎 File uploaded here: $GOFILE_LINK"
+
+          sudo curl \
+              -F "chat_id=2081111916" \
+              -F "document=@${ZIP_FILE}" \
+              -F "caption=${STOCK_DEVICE}" \
+              "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendDocument"
