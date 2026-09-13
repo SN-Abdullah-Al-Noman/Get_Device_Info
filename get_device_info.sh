@@ -16,9 +16,6 @@ else
     STOCK_HAS_AB_SLOT=FALSE
 fi
 
-# Copy stock boot.img
-cp -r "${EXTRACTED_FIRM_DIR}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
-
 # Extract firmware img
 EXTRACT_FIRMWARE_IMG "$EXTRACTED_FIRM_DIR" "all"
 
