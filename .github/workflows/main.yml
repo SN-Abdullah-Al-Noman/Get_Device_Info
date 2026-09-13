@@ -83,10 +83,10 @@ jobs:
 
       - name: Create Device ZIP
         run: |
-          ZIP_FILE="$OUT_DIR/$STOCK_DEVICE_info.zip"
-          echo "Creating ZIP: $ZIP_FILE"
-          7z a -tzip "$ZIP_FILE" "$OUT_DIR/$STOCK_DEVICE"/* -mx=5
-          echo "ZIP_FILE=$ZIP_FILE" | tee -a "$GITHUB_ENV"
+          ZIP_FILE="${OUT_DIR}/${STOCK_DEVICE}_info.zip"
+          echo "Creating ZIP: ${ZIP_FILE}"
+          7z a -tzip "${ZIP_FILE}" "${OUT_DIR}/${STOCK_DEVICE}"/* -mx=5
+          echo "ZIP_FILE=${ZIP_FILE}" | tee -a "$GITHUB_ENV"
 
           echo "Uploading to GoFile..."
           GOFILE_LINK=$(bash ./upload.sh "$ZIP_FILE")
