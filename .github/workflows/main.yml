@@ -83,8 +83,8 @@ jobs:
 
       - name: Create Device ZIP
         run: |
-          ZIP_NAME="${STOCK_DEVICE}-Device-Info.zip"
-          ZIP_FILE="$OUT_DIR/$ZIP_NAME"
+          ZIP_NAME="${{ inputs.TARGET_DEVICE }}_info.zip"
+          ZIP_PATH="$OUT_DIR/$ZIP_NAME"
           echo "Creating ZIP: $ZIP_FILE"
           zip -r "$ZIP_FILE" "$OUT_DIR/$STOCK_DEVICE"
           echo "ZIP_FILE=$ZIP_FILE" >> "$GITHUB_ENV"
