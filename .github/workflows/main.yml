@@ -76,15 +76,14 @@ jobs:
           source "$(pwd)/scripts/QuantumRom.sh"
           EXTRACT_FIRMWARE_IMG "$FIRM_DIR/$STOCK_DEVICE" "all"
 
-      - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }} Device info.
+      - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
           bash get_device_info.sh
 
       - name: Create Device ZIP
         run: |
-          ZIP_NAME="${{ inputs.TARGET_DEVICE }}_info.zip"
-          ZIP_FILE="$OUT_DIR/$ZIP_NAME"
+          ZIP_FILE="$OUT_DIR/$STOCK_DEVICE_info.zip"
           echo "Creating ZIP: $ZIP_FILE"
           7z a -tzip "$ZIP_FILE" "$OUT_DIR/$STOCK_DEVICE"/* -mx=5
           echo "ZIP_FILE=$ZIP_FILE" | tee -a "$GITHUB_ENV"
