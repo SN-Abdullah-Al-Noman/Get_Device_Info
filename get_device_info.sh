@@ -85,58 +85,58 @@ STOCK_DEVICE_CHIPSET=
 SDHMS_MAX_SUPPORTED_OS_SDK=40
 
 mkdir -p "$OUT_DIR/$STOCK_DEVICE"
-mkdir -p "$OUT_DIR/$STOCK_DEVICE/product/overlay"
-mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/cameradata"
-mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/etc/init"
-mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions"
-mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib"
-mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/lib64"
-mkdir -p "$OUT_DIR/$STOCK_DEVICE/system/media"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/Stock/product/overlay"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/Stock/system/cameradata"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/Stock/system/etc/init"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/Stock/system/etc/permissions"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib64"
+mkdir -p "$OUT_DIR/$STOCK_DEVICE/Stock/system/media"
 
 cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/framework-res*auto_generated_rro_product.apk \
-    "$OUT_DIR/$STOCK_DEVICE/product/overlay/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/product/overlay/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/SystemUI*auto_generated_rro_product.apk \
-    "$OUT_DIR/$STOCK_DEVICE/product/overlay/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/product/overlay/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/TeleService__*__auto_generated_rro_product.apk \
-    "$OUT_DIR/$STOCK_DEVICE/product/overlay/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/product/overlay/"
 
 cp -rf "$EXTRACTED_FIRM_DIR/system/system/cameradata/portrait_data" \
-    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/cameradata/"
 
 cp -rf "$EXTRACTED_FIRM_DIR/system/system/cameradata/singletake" \
-    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/cameradata/"
 
 cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/aremoji-feature.xml" \
-    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/cameradata/"
 
 cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/camera-feature.xml" \
-    "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/cameradata/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/init/rscmgr*.rc \
-    "$OUT_DIR/$STOCK_DEVICE/system/etc/init/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/etc/init/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/permissions/com.sec.feature.sensorhub_level*.xml \
-    "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/etc/permissions/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib/lib_SoundBooster_ver*.so \
-    "$OUT_DIR/$STOCK_DEVICE/system/lib/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib/"
 
 cp -f "$EXTRACTED_FIRM_DIR/system/system/lib/libsamsungSoundbooster_plus_legacy.so" \
-    "$OUT_DIR/$STOCK_DEVICE/system/lib/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib64/lib_SoundBooster_ver*.so \
-    "$OUT_DIR/$STOCK_DEVICE/system/lib64/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib64/"
 
 cp -f "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legacy.so" \
-    "$OUT_DIR/$STOCK_DEVICE/system/lib64/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib64/"
 
 find "$EXTRACTED_FIRM_DIR/system/system/media" -maxdepth 1 -type f \
-    -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
+    -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/Stock/system/media/" \;
 
 cp -f "$EXTRACTED_FIRM_DIR/system/system/etc/floating_feature.xml" \
-    "$OUT_DIR/$STOCK_DEVICE/"
+    "$OUT_DIR/$STOCK_DEVICE/Stock/"
 
 # Generate config file
 CONFIG_FILE="$QT_DIR/OUT/$STOCK_DEVICE/config"
