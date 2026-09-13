@@ -17,10 +17,18 @@ else
 fi
 
 # Copy stock boot.img
-cp -r "${EXTRACTED_FIRM_DIR}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}"
+cp -r "${EXTRACTED_FIRM_DIR}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
 
 # Extract firmware img
 EXTRACT_FIRMWARE_IMG "$EXTRACTED_FIRM_DIR" "all"
+
+# Rename boot.img
+export ANDROID_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.system.build.version.release")
+export BUILD_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.build.version.incremental")
+mv "${OUT_DIR}/${STOCK_DEVICE}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/boot_${STOCK_DEVICE}_OS_${ANDROID_VERSION}_${BUILD_VERSION}.img"
+
+# Copy stock floating feature file
+cp "${EXTRACTED_FIRM_DIR}/system/system/etc/floating_feature.xml" "${OUT_DIR}/${STOCK_DEVICE}/"
 
 INSTALL_FRAMEWORK "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework/framework-res.apk"
 DECOMPILE "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework" "$EXTRACTED_FIRM_DIR/system/system/framework/ssrm.jar" "$WORK_DIR"
@@ -95,7 +103,6 @@ cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/SystemUI*auto_generated_rro_product.
 cp -f "$EXTRACTED_FIRM_DIR"/product/overlay/TeleService__*__auto_generated_rro_product.apk \
     "$OUT_DIR/$STOCK_DEVICE/product/overlay/"
 
-
 cp -rf "$EXTRACTED_FIRM_DIR/system/system/cameradata/portrait_data" \
     "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
 
@@ -108,13 +115,11 @@ cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/aremoji-feature.xml" \
 cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/camera-feature.xml" \
     "$OUT_DIR/$STOCK_DEVICE/system/cameradata/"
 
-
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/init/rscmgr*.rc \
     "$OUT_DIR/$STOCK_DEVICE/system/etc/init/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/permissions/com.sec.feature.sensorhub_level*.xml \
     "$OUT_DIR/$STOCK_DEVICE/system/etc/permissions/"
-
 
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib/lib_SoundBooster_ver*.so \
     "$OUT_DIR/$STOCK_DEVICE/system/lib/"
@@ -122,19 +127,17 @@ cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib/lib_SoundBooster_ver*.so \
 cp -f "$EXTRACTED_FIRM_DIR/system/system/lib/libsamsungSoundbooster_plus_legacy.so" \
     "$OUT_DIR/$STOCK_DEVICE/system/lib/"
 
-
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib64/lib_SoundBooster_ver*.so \
     "$OUT_DIR/$STOCK_DEVICE/system/lib64/"
 
 cp -f "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legacy.so" \
     "$OUT_DIR/$STOCK_DEVICE/system/lib64/"
 
-
 find "$EXTRACTED_FIRM_DIR/system/system/media" -maxdepth 1 -type f \
     -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/system/media/" \;
 
 
-# Generate .config
+# Generate config file
 CONFIG_FILE="$QT_DIR/OUT/$STOCK_DEVICE/config"
 
 rm -f "$CONFIG_FILE"
@@ -157,7 +160,7 @@ EOF
 
 echo
 echo "=========================================="
-echo "             CONFIG GENERATED"
+echo "     $STOCK_DEVICE CONFIG GENERATED       "
 echo "=========================================="
 echo "- Config: $CONFIG_FILE"
 echo "=========================================="
