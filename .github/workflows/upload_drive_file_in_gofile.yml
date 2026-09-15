@@ -1,4 +1,4 @@
-name: Drive to gofile
+name: Drive to gofile uploader
 
 on:
   workflow_dispatch:
@@ -28,8 +28,27 @@ jobs:
           mkdir -p downloads
           gdown "${{ inputs.GDRIVE_LINK }}" -O downloads/
 
+          echo "Downloaded files:"
+          ls -lah downloads/
+
       - name: Upload file in GoFile
         run: |
           echo "Uploading to GoFile..."
-          GOFILE_LINK=$(bash ./upload.sh "downloads/*")
+
+          FILE=$(find downloads -maxdepth 1 -type f -print -quit)
+
+          if [ -z "$FILE" ]; then
+            echo "❌ No downloaded file found!"
+            exit 1
+          fi
+
+          echo "📦 File: $FILE"
+
+          GOFILE_LINK=$(bash ./upload.sh "$FILE")
+
+          if [ -z "$GOFILE_LINK" ]; then
+            echo "❌ GoFile upload failed!"
+            exit 1
+          fi
+
           echo "🌎 File uploaded here: $GOFILE_LINK"
