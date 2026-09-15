@@ -28,7 +28,7 @@ jobs:
           mkdir -p downloads
           gdown "${{ inputs.GDRIVE_LINK }}" -O downloads/
 
-      - name: Create Device ZIP
+      - name: Upload file in GoFile
         run: |
           echo "Uploading to GoFile..."
           GOFILE_LINK=$(bash ./upload.sh "downloads/*")
