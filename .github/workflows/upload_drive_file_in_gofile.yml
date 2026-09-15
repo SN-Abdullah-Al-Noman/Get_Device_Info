@@ -1,0 +1,35 @@
+name: Drive to gofile
+
+on:
+  workflow_dispatch:
+    inputs:
+      GDRIVE_LINK:
+        description: ""
+        required: true
+        default: "Paste link here"
+
+jobs:
+  build:
+    name: Start Drive to Gofile uploader
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3 python3-pip
+          pip3 install gdown
+
+      - name: Download
+        run: |
+          mkdir -p downloads
+          gdown "${{ inputs.GDRIVE_LINK }}" -O downloads/
+
+      - name: Create Device ZIP
+        run: |
+          echo "Uploading to GoFile..."
+          GOFILE_LINK=$(bash ./upload.sh "downloads/*")
+          echo "🌎 File uploaded here: $GOFILE_LINK"
