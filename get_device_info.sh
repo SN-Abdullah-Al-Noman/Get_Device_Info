@@ -6,12 +6,6 @@ source "$(pwd)/scripts/QuantumRom.sh"
 
 EXTRACTED_FIRM_DIR="$FIRM_DIR/$STOCK_DEVICE"
 
-if [ -d "$EXTRACTED_FIRM_DIR/system_ext/etc" ]; then
-    STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
-else
-    STOCK_HAS_SEPARATE_SYSTEM_EXT=FALSE
-fi
-
 if [ -f "$EXTRACTED_FIRM_DIR/system_a.img" ]; then
     STOCK_HAS_AB_SLOT=TRUE
 else
@@ -20,6 +14,12 @@ fi
 
 # Extract firmware img
 EXTRACT_FIRMWARE_IMG "$EXTRACTED_FIRM_DIR" "all"
+
+if [ -d "$EXTRACTED_FIRM_DIR/system_ext/etc" ]; then
+    STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
+else
+    STOCK_HAS_SEPARATE_SYSTEM_EXT=FALSE
+fi
 
 # Rename boot.img
 export ANDROID_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.system.build.version.release")
@@ -72,7 +72,7 @@ STOCK_VNDK_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.build.ve
 STOCK_DEVICE_CPU_ABILIST=$(GET_PROP "$EXTRACTED_FIRM_DIR" "vendor" "ro.vendor.product.cpu.abilist")
 SOURCE=$(GET_PROP "$EXTRACTED_FIRM_DIR" "system" "ro.build.PDA")
 
-if compgen -G "$EXTRACTED_FIRM_DIR/system/system/priv-app/EuiccService" > /dev/null; then
+if [ -d "$EXTRACTED_FIRM_DIR/system/system/priv-app/EuiccService" ]; then
     STOCK_HAS_ESIM_SUPPORT=TRUE
 else
     STOCK_HAS_ESIM_SUPPORT=FALSE
