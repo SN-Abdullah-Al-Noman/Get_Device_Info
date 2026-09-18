@@ -6,7 +6,7 @@ source "$(pwd)/scripts/QuantumRom.sh"
 
 EXTRACTED_FIRM_DIR="$FIRM_DIR/$STOCK_DEVICE"
 
-if compgen -G "$EXTRACTED_FIRM_DIR/system_ext*.img" > /dev/null; then
+if [ -d "$EXTRACTED_FIRM_DIR/system_ext/etc" ]; then
     STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
 else
     STOCK_HAS_SEPARATE_SYSTEM_EXT=FALSE
