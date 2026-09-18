@@ -74,12 +74,7 @@ jobs:
           source "$(pwd)/scripts/QuantumRom.sh"
           EXTRACT_SUPER_IMG "$FIRM_DIR/$STOCK_DEVICE"
 
-      - name: Extract firmware img
-        run: |
-          source "$(pwd)/scripts/QuantumRom.sh"
-          EXTRACT_FIRMWARE_IMG "$FIRM_DIR/$STOCK_DEVICE" "all"
-
-      - name: Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
+      - name: Extract img and Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
           bash get_device_info.sh
