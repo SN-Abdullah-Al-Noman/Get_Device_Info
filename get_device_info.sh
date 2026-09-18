@@ -32,12 +32,8 @@ cp "${EXTRACTED_FIRM_DIR}/system/system/etc/floating_feature.xml" "${OUT_DIR}/${
 INSTALL_FRAMEWORK "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework/framework-res.apk"
 DECOMPILE "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework" "$EXTRACTED_FIRM_DIR/system/system/framework/ssrm.jar" "$WORK_DIR"
 
-
 GET_SIOP_DVFS_FILE_NAME() {
-    echo " "
-
     if [ "$#" -ne 1 ]; then
-        echo -e "Usage: ${FUNCNAME[0]} <EXTRACTED_SSRM_DIRECTORY>"
         return 1
     fi
 
@@ -45,25 +41,12 @@ GET_SIOP_DVFS_FILE_NAME() {
     local FILE="$SSRM_DIR/smali/com/android/server/ssrm/Feature.smali"
 
     if [ ! -f "$FILE" ]; then
-        echo "- File name not found: $FILE"
-        return
+        return 1
     fi
 
-    if FOUND=$(grep -E 'const-string [vp][0-9]+, "dvfs_policy_.*_xx"' "$FILE"); then
-        echo "- Found DVFS policy: $FOUND"
-        STOCK_DVFS_FILENAME="$FOUND"
-    else
-        echo "- DVFS policy file name not found."
-    fi
-
-    if FOUND=$(grep -E 'const-string [vp][0-9]+, "siop_[^"]*_[^"]*"' "$FILE"); then
-        echo "- Found SIOP policy: $FOUND"
-        STOCK_SIOP_POLICY_FILENAME="$FOUND"
-    else
-        echo "- SIOP policy file name not found."
-    fi
+    export STOCK_DVFS_FILENAME=$(grep -oE '"dvfs_policy_[^"]*_xx"' "$FILE" | head -n1 | tr -d '"')
+    export STOCK_SIOP_POLICY_FILENAME=$(grep -oE '"siop_[^"]*_[^"]*"' "$FILE" | head -n1 | tr -d '"')
 }
-
 
 # Get info
 GET_SIOP_DVFS_FILE_NAME "$WORK_DIR/ssrm"
