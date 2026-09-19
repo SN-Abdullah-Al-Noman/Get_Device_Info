@@ -94,7 +94,10 @@ cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/aremoji-feature.xml" \
 cp -f "$EXTRACTED_FIRM_DIR/system/system/cameradata/camera-feature.xml" \
     "$OUT_DIR/$STOCK_DEVICE/Stock/system/cameradata/"
 
-cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/init/rscmgr*.rc \
+cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/init/rscmgr_*.rc \
+    "$OUT_DIR/$STOCK_DEVICE/Stock/system/etc/init/"
+
+cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/init/ssu_*.rc \
     "$OUT_DIR/$STOCK_DEVICE/Stock/system/etc/init/"
 
 cp -f "$EXTRACTED_FIRM_DIR"/system/system/etc/permissions/com.sec.feature.sensorhub_level*.xml \
@@ -112,7 +115,6 @@ cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib64/lib_SoundBooster_ver*.so \
 cp -f "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legacy.so" \
     "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib64/"
 
-# Copy stock floating feature file
 cp "${EXTRACTED_FIRM_DIR}/system/system/etc/floating_feature.xml" "${OUT_DIR}/${STOCK_DEVICE}/"
 
 find "$EXTRACTED_FIRM_DIR/system/system/media" -maxdepth 1 -type f \
