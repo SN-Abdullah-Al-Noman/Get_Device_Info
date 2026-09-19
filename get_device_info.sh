@@ -26,9 +26,6 @@ export ANDROID_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" 
 export BUILD_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.build.version.incremental")
 mv "${OUT_DIR}/${STOCK_DEVICE}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/boot_${STOCK_DEVICE}_OS_${ANDROID_VERSION}_${BUILD_VERSION}.img"
 
-# Copy stock floating feature file
-cp "${EXTRACTED_FIRM_DIR}/system/system/etc/floating_feature.xml" "${OUT_DIR}/${STOCK_DEVICE}/"
-
 INSTALL_FRAMEWORK "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework/framework-res.apk"
 DECOMPILE "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework" "$EXTRACTED_FIRM_DIR/system/system/framework/ssrm.jar" "$WORK_DIR"
 
@@ -115,11 +112,11 @@ cp -f "$EXTRACTED_FIRM_DIR"/system/system/lib64/lib_SoundBooster_ver*.so \
 cp -f "$EXTRACTED_FIRM_DIR/system/system/lib64/libsamsungSoundbooster_plus_legacy.so" \
     "$OUT_DIR/$STOCK_DEVICE/Stock/system/lib64/"
 
+# Copy stock floating feature file
+cp "${EXTRACTED_FIRM_DIR}/system/system/etc/floating_feature.xml" "${OUT_DIR}/${STOCK_DEVICE}/"
+
 find "$EXTRACTED_FIRM_DIR/system/system/media" -maxdepth 1 -type f \
     -exec cp -f {} "$OUT_DIR/$STOCK_DEVICE/Stock/system/media/" \;
-
-cp -f "$EXTRACTED_FIRM_DIR/system/system/etc/floating_feature.xml" \
-    "$OUT_DIR/$STOCK_DEVICE/Stock/"
 
 # Generate config file
 CONFIG_FILE="$QT_DIR/OUT/$STOCK_DEVICE/config"
