@@ -1,0 +1,49 @@
+name: Device Info Collector.
+
+on:
+  workflow_dispatch:
+    inputs:
+      STOCK_DEVICE:
+        description: "Your own device model or None"
+        required: true
+        default: "SM-A225F"
+
+      STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK:
+        description: "Input stock device CSC code or direct download link."
+        required: true
+        default: "BKD"
+
+      STOCK_FW_VERSION:
+        description: "Specific Samsung firmware version (PDA/CSC/MODEM) OR (AP/CSC/CP)"
+        required: false
+
+
+jobs:
+  build:
+    name: Start QuantumROM Tools
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v4
+
+      - name: Set variables
+        run: |
+          echo "FIRM_DIR=$(pwd)/FW" | tee -a "$GITHUB_ENV"
+          echo "OUT_DIR=$(pwd)/OUT" | tee -a "$GITHUB_ENV"
+          echo "WORK_DIR=$(pwd)/WORK" | tee -a "$GITHUB_ENV"
+          echo "APKTOOL=$(pwd)/bin/java/apktool.jar" | tee -a "$GITHUB_ENV"
+          echo "STOCK_DEVICE=${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
+
+      - name: Install Dependencies.
+        run: |
+          sudo apt update
+          DEBIAN_FRONTEND=noninteractive sudo apt install -y p7zip-full lz4 liblz4-1 liblz4-dev libzstd1 libzstd-dev build-essential android-sdk-libsparse-utils linux-modules-extra-$(uname -r) \
+              f2fs-tools fuse2fs fuse e2fsprogs python3 python3-pip zipalign unzip openjdk-21-jdk jq perl xxd kmod erofs-utils curl wget
+          sudo modprobe f2fs || true
+
+      - name: Extract super.img
+        run: |
+          sudo bash $(pwd)/scripts/extract_img.sh" odm.img "$FIRM_DIR"
