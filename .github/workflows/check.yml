@@ -45,4 +45,4 @@ jobs:
 
       - name: Extract f2fs img
         run: |
-          sudo bash $(pwd)/scripts/extract_img.sh" odm.img "$FIRM_DIR"
+          sudo bash $(pwd)/extract_img.sh" odm.img "$FIRM_DIR"
