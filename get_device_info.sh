@@ -58,10 +58,17 @@ else
     STOCK_HAS_ESIM_SUPPORT=FALSE
 fi
 
+if [[ "$STOCK_DVFS_FILENAME" == dvfs_policy_mt* ]]; then
+    STOCK_DEVICE_CHIPSET="Mediatek"
+elif [[ "$STOCK_DVFS_FILENAME" == dvfs_policy_sm* ]]; then
+    STOCK_DEVICE_CHIPSET="Snapdragon"
+else
+    STOCK_DEVICE_CHIPSET="Mediatek"
+fi
+
 
 # Need to do it manually
 USE_ALT_SDHMS_APP=TRUE
-STOCK_DEVICE_CHIPSET=
 SDHMS_MAX_SUPPORTED_OS_SDK=40
 
 mkdir -p "$OUT_DIR/$STOCK_DEVICE"
