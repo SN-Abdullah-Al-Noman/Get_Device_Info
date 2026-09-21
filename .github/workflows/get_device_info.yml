@@ -76,7 +76,7 @@ jobs:
       - name: Extract img and Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
-          bash get_device_info.sh
+          sudo bash get_device_info.sh
 
       - name: Create Device ZIP
         env:
