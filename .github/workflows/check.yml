@@ -1,4 +1,4 @@
-name: Device Info Collector.
+name: Check
 
 on:
   workflow_dispatch:
