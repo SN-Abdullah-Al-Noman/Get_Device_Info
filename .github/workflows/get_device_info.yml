@@ -33,7 +33,7 @@ jobs:
           echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
           echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
 
-          echo "FIRM_DIR=$(pwd)/FW/${{ inputs.TARGET_DEVICE }}" | tee -a "$GITHUB_ENV"
+          echo "FIRM_DIR=$(pwd)/FW/${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
           echo "OUT_DIR=$(pwd)/OUT" | tee -a "$GITHUB_ENV"
           echo "WORK_DIR=$(pwd)/WORK" | tee -a "$GITHUB_ENV"
           echo "APKTOOL=$(pwd)/bin/java/apktool.jar" | tee -a "$GITHUB_ENV"
