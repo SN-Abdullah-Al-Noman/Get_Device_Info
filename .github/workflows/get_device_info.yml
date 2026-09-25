@@ -69,7 +69,7 @@ jobs:
 
           # Copy stock boot.img
           mkdir -p "${OUT_DIR}/${STOCK_DEVICE}"
-          cp -r "${FIRM_DIR}/${STOCK_DEVICE}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
+          cp -r "${FIRM_DIR}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
 
       - name: Extract super.img
         run: |
