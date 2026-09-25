@@ -80,7 +80,7 @@ jobs:
         run: |
           sudo bash -c 'source "'"$(pwd)"'/scripts/QuantumRom.sh"; EXTRACT_FIRMWARE_IMG "'"$FIRM_DIR"'" "all"'
           sudo chown -R "$(id -u):$(id -g)" "$FIRM_DIR" && chmod -R u+rwX "$FIRM_DIR"
-          sudo bash get_device_info.sh
+          sudo bash get_device_info.sh "$FIRM_DIR"
 
       - name: Create Device ZIP
         env:
