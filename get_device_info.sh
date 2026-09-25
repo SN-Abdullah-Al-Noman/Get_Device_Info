@@ -12,9 +12,6 @@ else
     STOCK_HAS_AB_SLOT=FALSE
 fi
 
-# Delete img
-rm -rf "$FIRM_DIR"/*.img
-
 if [ -d "$EXTRACTED_FIRM_DIR/system_ext/etc" ]; then
     STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
 else
@@ -25,6 +22,9 @@ fi
 export ANDROID_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.system.build.version.release")
 export BUILD_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.build.version.incremental")
 mv "${OUT_DIR}/${STOCK_DEVICE}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/boot_${STOCK_DEVICE}_OS_${ANDROID_VERSION}_${BUILD_VERSION}.img"
+
+# Delete img
+rm -rf "$EXTRACTED_FIRM_DIR"/*.img
 
 INSTALL_FRAMEWORK "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework/framework-res.apk"
 DECOMPILE "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework" "$EXTRACTED_FIRM_DIR/system/system/framework/ssrm.jar" "$WORK_DIR"
