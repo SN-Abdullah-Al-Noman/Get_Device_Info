@@ -4,7 +4,7 @@ QT_DIR="$(pwd)"
 
 source "$(pwd)/scripts/QuantumRom.sh"
 
-EXTRACTED_FIRM_DIR="$FIRM_DIR/$STOCK_DEVICE"
+EXTRACTED_FIRM_DIR="$FIRM_DIR"
 
 if [ -f "$EXTRACTED_FIRM_DIR/system_a.img" ]; then
     STOCK_HAS_AB_SLOT=TRUE
@@ -12,8 +12,8 @@ else
     STOCK_HAS_AB_SLOT=FALSE
 fi
 
-# Extract firmware img
-EXTRACT_FIRMWARE_IMG "$EXTRACTED_FIRM_DIR" "all"
+# Delete img
+rm -rf "$FIRM_DIR"/*.img
 
 if [ -d "$EXTRACTED_FIRM_DIR/system_ext/etc" ]; then
     STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
