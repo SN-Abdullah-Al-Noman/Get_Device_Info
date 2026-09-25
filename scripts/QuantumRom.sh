@@ -88,7 +88,7 @@ DOWNLOAD_FIRMWARE() {
 
     local MODEL="$1"
     local CSC="$2"
-    local DOWN_DIR="${3}/$MODEL"
+    local DOWN_DIR="$3"
 	local VERSION="${4:-}"
 
     rm -rf "$DOWN_DIR"
@@ -113,6 +113,7 @@ DOWNLOAD_FIRMWARE() {
     echo -e "  Samsung FW Downloader   "
     echo -e "======================================"
     echo -e "MODEL: $MODEL | CSC: $CSC"
+	echo -e "DOWNLOAD DIR: $DOWN_DIR"
 
     # Check version
 	if [ -z "$VERSION" ]; then
@@ -278,23 +279,23 @@ EXTRACT_FIRMWARE() {
 
     local FIRM_DIR="$1"
 
-    echo -e "Extracting downloaded firmware from: $FIRM_DIR"
+    echo -e "Extracting downloaded firmware."
 
 	if [ ! -d "$FIRM_DIR" ]; then
         echo -e "- Directory not found: $FIRM_DIR"
         exit
     fi
 
-# For extension less file
-for file in "$FIRM_DIR"/*; do
-    [ -f "$file" ] || continue
+    # For extension less file
+    for file in "$FIRM_DIR"/*; do
+        [ -f "$file" ] || continue
 
-    case "$(basename "$file")" in
-        *.*) continue ;;
-    esac
+        case "$(basename "$file")" in
+            *.*) continue ;;
+        esac
 
-    7z x -y -bd -bsp1 -o"$FIRM_DIR" "$file"
-done
+        7z x -y -bd -bsp1 -o"$FIRM_DIR" "$file"
+    done
 
     # ---- ZIP ----
     for file in "$FIRM_DIR"/*.zip; do
@@ -448,7 +449,7 @@ PREPARE_PARTITIONS() {
     if [ -z "$STOCK_DEVICE" ] || [ "$STOCK_DEVICE" = "None" ]; then
         local BUILD_PARTITIONS="odm,odm_dlkm,product,system,system_ext,system_dlkm,vendor,vendor_dlkm,odm_a,odm_dlkm_a,product_a,system_a,system_ext_a,system_dlkm_a,vendor_a,vendor_dlkm_a,optics,optics_a"
 	else
-	    local BUILD_PARTITIONS="odm,product,system_ext,system,vendor"
+	    local BUILD_PARTITIONS="product,system_ext,system"
     fi
 
 	# Delete empty b slot images
@@ -576,11 +577,6 @@ EXTRACT_FIRMWARE_IMG() {
             [ -e "$imgfile" ] || continue
             extract_img "$imgfile"
         done
-
-	    if [ "${GITHUB_ACTIONS}" = "true" ]; then
-            rm -f "$EXTRACTED_FIRM_DIR"/*.img
-        fi
-
     else
         local TARGET_IMG="${EXTRACTED_FIRM_DIR}/$MODE"
 
@@ -591,8 +587,6 @@ EXTRACT_FIRMWARE_IMG() {
 
         extract_img "$TARGET_IMG"
     fi
-
-    chmod -R u+rwX "$EXTRACTED_FIRM_DIR"
 }
 
 
@@ -691,7 +685,7 @@ DECOMPILE() {
     local BASENAME="$(basename "${FILE%.*}")"
     local OUT="$DECOMPILE_DIR/$BASENAME"
 
-    echo -e "Decompiling: $FILE in $DECOMPILE_DIR"
+    echo -e "Decompiling: $FILE in: $DECOMPILE_DIR"
 
 	if [ ! -f "$FILE" ]; then
         echo -e "- File not found: $FILE"
