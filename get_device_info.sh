@@ -2,9 +2,9 @@
 
 QT_DIR="$(pwd)"
 
-source "$(pwd)/scripts/QuantumRom.sh"
+EXTRACTED_FIRM_DIR="$1"
 
-EXTRACTED_FIRM_DIR="$FIRM_DIR"
+source "$(pwd)/scripts/QuantumRom.sh"
 
 if [ -f "$EXTRACTED_FIRM_DIR/system_a.img" ]; then
     STOCK_HAS_AB_SLOT=TRUE
