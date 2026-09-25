@@ -71,6 +71,8 @@ jobs:
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
           EXTRACT_SUPER_IMG "$FIRM_DIR"
+          echo "Files in $FIRM_DIR:"
+          ls -la "$FIRM_DIR"
 
       - name: Extract img and Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
         run: |
