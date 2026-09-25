@@ -64,7 +64,7 @@ jobs:
 
       - name: Extract firmware
         run: |
-          source "$(pwd)/scripts/QuantumRom
+          source "$(pwd)/scripts/QuantumRom.sh"
           EXTRACT_FIRMWARE "$FIRM_DIR"
 
           # Copy stock boot.img
