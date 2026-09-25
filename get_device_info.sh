@@ -5,6 +5,8 @@ QT_DIR="$(pwd)"
 EXTRACTED_FIRM_DIR="$FIRM_DIR"
 echo "Extracted fw dir: $EXTRACTED_FIRM_DIR"
 echo "Stock device: $STOCK_DEVICE"
+echo "Files in $EXTRACTED_FIRM_DIR:"
+ls -la "$EXTRACTED_FIRM_DIR"
 
 source "$(pwd)/scripts/QuantumRom.sh"
 
