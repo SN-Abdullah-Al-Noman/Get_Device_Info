@@ -67,10 +67,6 @@ jobs:
           source "$(pwd)/scripts/QuantumRom.sh"
           EXTRACT_FIRMWARE "$FIRM_DIR"
 
-          # Copy stock boot.img
-          mkdir -p "${OUT_DIR}/${STOCK_DEVICE}"
-          cp -r "${FIRM_DIR}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
-
       - name: Extract super.img
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
