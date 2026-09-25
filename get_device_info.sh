@@ -2,7 +2,9 @@
 
 QT_DIR="$(pwd)"
 
-EXTRACTED_FIRM_DIR="$1"
+EXTRACTED_FIRM_DIR="$FIRM_DIR"
+echo "Extracted fw dir: $EXTRACTED_FIRM_DIR"
+echo "Stock device: $STOCK_DEVICE"
 
 source "$(pwd)/scripts/QuantumRom.sh"
 
