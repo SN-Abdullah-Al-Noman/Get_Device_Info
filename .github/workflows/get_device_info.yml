@@ -29,13 +29,14 @@ jobs:
 
       - name: Set variables
         run: |
-          echo "FIRM_DIR=$(pwd)/FW" | tee -a "$GITHUB_ENV"
-          echo "OUT_DIR=$(pwd)/OUT" | tee -a "$GITHUB_ENV"
-          echo "WORK_DIR=$(pwd)/WORK" | tee -a "$GITHUB_ENV"
-          echo "APKTOOL=$(pwd)/bin/java/apktool.jar" | tee -a "$GITHUB_ENV"
           echo "STOCK_DEVICE=${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
           echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
           echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
+
+          echo "FIRM_DIR=$(pwd)/FW/${{ inputs.TARGET_DEVICE }}" | tee -a "$GITHUB_ENV"
+          echo "OUT_DIR=$(pwd)/OUT" | tee -a "$GITHUB_ENV"
+          echo "WORK_DIR=$(pwd)/WORK" | tee -a "$GITHUB_ENV"
+          echo "APKTOOL=$(pwd)/bin/java/apktool.jar" | tee -a "$GITHUB_ENV"
 
       - name: Check disk space
         id: disk
@@ -64,8 +65,8 @@ jobs:
       - name: Extract firmware
         run: |
           source "$(pwd)/scripts/QuantumRom
-          EXTRACT_FIRMWARE "$FIRM_DIR/$STOCK_DEVICE"
-          sudo bash -c 'source "'"$(pwd)"'/scripts/QuantumRom.sh"; EXTRACT_FIRMWARE_IMG "'"$FIRM_DIR/$STOCK_DEVICE"'" "all"'
+          EXTRACT_FIRMWARE "$FIRM_DIR"
+
           # Copy stock boot.img
           mkdir -p "${OUT_DIR}/${STOCK_DEVICE}"
           cp -r "${FIRM_DIR}/${STOCK_DEVICE}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
@@ -73,11 +74,12 @@ jobs:
       - name: Extract super.img
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
-          EXTRACT_SUPER_IMG "$FIRM_DIR/$STOCK_DEVICE"
+          EXTRACT_SUPER_IMG "$FIRM_DIR"
 
       - name: Extract img and Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
         run: |
-          source "$(pwd)/scripts/QuantumRom.sh"
+          sudo bash -c 'source "'"$(pwd)"'/scripts/QuantumRom.sh"; EXTRACT_FIRMWARE_IMG "'"$FIRM_DIR"'" "all"'
+          sudo chown -R "$(id -u):$(id -g)" "$FIRM_DIR" && chmod -R u+rwX "$FIRM_DIR"
           sudo bash get_device_info.sh
 
       - name: Create Device ZIP
@@ -85,8 +87,8 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
-          ANDROID_VERSION=$(GET_PROP "$FIRM_DIR/$STOCK_DEVICE" "system" "ro.system.build.version.release")
-          BUILD_VERSION=$(GET_PROP "$FIRM_DIR/$STOCK_DEVICE" "system" "ro.build.version.incremental")
+          ANDROID_VERSION=$(GET_PROP "$FIRM_DIR" "system" "ro.system.build.version.release")
+          BUILD_VERSION=$(GET_PROP "$FIRM_DIR" "system" "ro.build.version.incremental")
 
           ZIP_FILE="${OUT_DIR}/${STOCK_DEVICE}_OS_${ANDROID_VERSION}_${BUILD_VERSION}.zip"
           echo "Creating ZIP: ${ZIP_FILE}"
