@@ -6,7 +6,7 @@ on:
       STOCK_DEVICE:
         description: "Your own device model or None"
         required: true
-        default: "SM-A225F"
+        default: "SM-A236E"
 
       STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK:
         description: "Input stock device CSC code or direct download link."
