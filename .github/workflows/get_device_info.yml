@@ -63,7 +63,9 @@ jobs:
 
       - name: Extract firmware
         run: |
-          source "$(pwd)/scripts/QuantumRom.  EXTRACT_FIRMWARE "$FIRM_DIR/$STOCK_DEVICE"
+          source "$(pwd)/scripts/QuantumRom
+          EXTRACT_FIRMWARE "$FIRM_DIR/$STOCK_DEVICE"
+          sudo bash -c 'source "'"$(pwd)"'/scripts/QuantumRom.sh"; EXTRACT_FIRMWARE_IMG "'"$FIRM_DIR/$STOCK_DEVICE"'" "all"'
           # Copy stock boot.img
           mkdir -p "${OUT_DIR}/${STOCK_DEVICE}"
           cp -r "${FIRM_DIR}/${STOCK_DEVICE}/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
