@@ -41,7 +41,8 @@ GET_SIOP_DVFS_FILE_NAME() {
         return 1
     fi
 
-    export STOCK_DVFS_FILENAME=$(grep -oE '"dvfs_policy_[^"]*"' "$FILE" | head -n1 | tr -d '"')
+    export STOCK_DVFS_FILENAME=$(grep -E 'const-string [vp][2-9]+, "dvfs_policy_.*"' "$FILE")
+    export STOCK_DVFS_FILENAME=$(echo "$STOCK_DVFS_FILENAME" | sed -E 's/.*(dvfs_policy_.*)/\1/')
     export STOCK_SIOP_POLICY_FILENAME=$(grep -oE '"siop_[^"]*_[^"]*"' "$FILE" | head -n1 | tr -d '"')
 }
 
