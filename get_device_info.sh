@@ -1,6 +1,7 @@
 #!/bin/bash
 
 QT_DIR="$(pwd)"
+mkdir -p "${OUT_DIR}/${STOCK_DEVICE}"
 
 EXTRACTED_FIRM_DIR="$FIRM_DIR"
 echo "Extracted fw dir: $EXTRACTED_FIRM_DIR"
