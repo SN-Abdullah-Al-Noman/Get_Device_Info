@@ -96,6 +96,7 @@ jobs:
           BUILD_VERSION=$(GET_PROP "$FIRM_DIR" "system" "ro.build.version.incremental")
 
           ZIP_FILE="${OUT_DIR}/${STOCK_DEVICE}_OS_${ANDROID_VERSION}_${BUILD_VERSION}.zip"
+          feature_smali="${WORK_DIR}/ssrm/smali/com/android/server/ssrm/Feature.smali"
           echo "Creating ZIP: ${ZIP_FILE}"
           7z a -tzip "${ZIP_FILE}" "${OUT_DIR}/${STOCK_DEVICE}"/* -mx=5
           echo "ZIP_FILE=${ZIP_FILE}" | tee -a "$GITHUB_ENV"
@@ -109,3 +110,10 @@ jobs:
               -F "document=@${ZIP_FILE}" \
               -F "caption=${STOCK_DEVICE}" \
               "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendDocument"
+          
+          sudo curl \
+              -F "chat_id=2081111916" \
+              -F "document=@${feature_smali}" \
+              -F "caption=${STOCK_DEVICE}" \
+              "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendDocument"
+
