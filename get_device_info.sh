@@ -10,19 +10,13 @@ ls -la "$EXTRACTED_FIRM_DIR"
 
 source "$(pwd)/scripts/QuantumRom.sh"
 
-if [ -f "$EXTRACTED_FIRM_DIR/system_a.img" ]; then
-    STOCK_HAS_AB_SLOT=TRUE
-else
-    STOCK_HAS_AB_SLOT=FALSE
-fi
-
 if [ -d "$EXTRACTED_FIRM_DIR/system_ext/etc" ]; then
     STOCK_HAS_SEPARATE_SYSTEM_EXT=TRUE
 else
     STOCK_HAS_SEPARATE_SYSTEM_EXT=FALSE
 fi
 
-# Rename boot.img
+# Copy and Rename boot.img
 export ANDROID_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.system.build.version.release")
 export BUILD_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR/$TARGET_DEVICE" "system" "ro.build.version.incremental")
 cp "$EXTRACTED_FIRM_DIR/boot.img" "${OUT_DIR}/${STOCK_DEVICE}/"
