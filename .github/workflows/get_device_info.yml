@@ -76,14 +76,14 @@ jobs:
 
       - name: Extract img and Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
         run: |
-          sudo bash -c 'source "'"$(pwd)"'/scripts/QuantumRom.sh"; EXTRACT_FIRMWARE_IMG "'"$FIRM_DIR"'" "all"'
-          sudo chown -R "$(id -u):$(id -g)" "$FIRM_DIR" && chmod -R u+rwX "$FIRM_DIR"
-
           if [ -f "${FIRM_DIR}/system_a.img" ]; then
               echo "STOCK_HAS_AB_SLOT=TRUE" | tee -a "$GITHUB_ENV"
           else
               echo "STOCK_HAS_AB_SLOT=FALSE" | tee -a "$GITHUB_ENV"
           fi
+
+          sudo bash -c 'source "'"$(pwd)"'/scripts/QuantumRom.sh"; EXTRACT_FIRMWARE_IMG "'"$FIRM_DIR"'" "all"'
+          sudo chown -R "$(id -u):$(id -g)" "$FIRM_DIR" && chmod -R u+rwX "$FIRM_DIR"
 
           bash get_device_info.sh "$FIRM_DIR"
 
