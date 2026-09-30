@@ -49,7 +49,7 @@ jobs:
         run: |
           source "$(pwd)/scripts/QuantumRom.sh"
           mkdir -p "$FIRM_DIR" "$OUT_DIR" "$WORK_DIR"
-          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK
+          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC"
 
       - name: Upload file in GoFile
         run: |
