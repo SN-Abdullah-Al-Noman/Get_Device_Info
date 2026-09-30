@@ -54,7 +54,7 @@ jobs:
       - name: Upload file in GoFile
         run: |
           echo "Uploading to GoFile..."
-          FILE=$(find downloads -maxdepth 1 -type f -print -quit)
+          FILE=$(find "$FIRM_DIR" -maxdepth 1 -type f -print -quit)
 
           if [ -z "$FILE" ]; then
             echo "❌ No downloaded file found!"
