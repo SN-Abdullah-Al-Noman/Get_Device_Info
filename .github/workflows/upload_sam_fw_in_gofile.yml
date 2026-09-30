@@ -1,40 +1,59 @@
-name: Drive to gofile uploader
+name: Device Info Collector.
 
 on:
   workflow_dispatch:
     inputs:
-      GDRIVE_LINK:
-        description: ""
+      STOCK_DEVICE:
+        description: "Your own device model or None"
         required: true
-        default: "Paste link here"
+        default: "SM-A236E"
+
+      STOCK_DEVICE_CSC:
+        description: "Input stock device CSC"
+        required: true
+        default: "BKD"
+
+      STOCK_FW_VERSION:
+        description: "Specific Samsung firmware version (PDA/CSC/MODEM) OR (AP/CSC/CP)"
+        required: false
+
 
 jobs:
   build:
-    name: Start Drive to Gofile uploader
+    name: Start QuantumROM Tools
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository.
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      - name: Set variables
         run: |
-          sudo apt update
-          sudo apt install -y python3 python3-pip
-          pip3 install gdown
+          echo "STOCK_DEVICE=${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_DEVICE_CSC=${{ inputs.STOCK_DEVICE_CSC }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
+          echo "FIRM_DIR=$(pwd)/FW/${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
 
-      - name: Download
+      - name: Check disk space
+        id: disk
         run: |
-          mkdir -p downloads
-          gdown "${{ inputs.GDRIVE_LINK }}" -O downloads/
+          FREE_GB=$(df -BG "$GITHUB_WORKSPACE" | awk 'NR==2 {gsub("G","",$4); print $4}')
+          echo "Free space: ${FREE_GB} GB"
+          echo "enough=$([ "$FREE_GB" -ge 50 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 
-          echo "Downloaded files:"
-          ls -lah downloads/
+      - name: Remove unnecessary files.
+        if: steps.disk.outputs.enough == 'false'
+        uses: rokibhasansagar/slimhub_actions@v25.42.5
+
+      - name: Download firmware ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}
+        run: |
+          source "$(pwd)/scripts/QuantumRom.sh"
+          mkdir -p "$FIRM_DIR" "$OUT_DIR" "$WORK_DIR"
+          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK
 
       - name: Upload file in GoFile
         run: |
           echo "Uploading to GoFile..."
-
           FILE=$(find downloads -maxdepth 1 -type f -print -quit)
 
           if [ -z "$FILE" ]; then
