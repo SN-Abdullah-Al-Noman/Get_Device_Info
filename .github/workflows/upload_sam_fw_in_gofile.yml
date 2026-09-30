@@ -1,4 +1,4 @@
-name: Device Info Collector.
+name: Download sam fw & upload in gofile
 
 on:
   workflow_dispatch:
