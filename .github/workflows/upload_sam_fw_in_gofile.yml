@@ -1,0 +1,54 @@
+name: Drive to gofile uploader
+
+on:
+  workflow_dispatch:
+    inputs:
+      GDRIVE_LINK:
+        description: ""
+        required: true
+        default: "Paste link here"
+
+jobs:
+  build:
+    name: Start Drive to Gofile uploader
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3 python3-pip
+          pip3 install gdown
+
+      - name: Download
+        run: |
+          mkdir -p downloads
+          gdown "${{ inputs.GDRIVE_LINK }}" -O downloads/
+
+          echo "Downloaded files:"
+          ls -lah downloads/
+
+      - name: Upload file in GoFile
+        run: |
+          echo "Uploading to GoFile..."
+
+          FILE=$(find downloads -maxdepth 1 -type f -print -quit)
+
+          if [ -z "$FILE" ]; then
+            echo "❌ No downloaded file found!"
+            exit 1
+          fi
+
+          echo "📦 File: $FILE"
+
+          GOFILE_LINK=$(bash ./upload.sh "$FILE")
+
+          if [ -z "$GOFILE_LINK" ]; then
+            echo "❌ GoFile upload failed!"
+            exit 1
+          fi
+
+          echo "🌎 File uploaded here: $GOFILE_LINK"
