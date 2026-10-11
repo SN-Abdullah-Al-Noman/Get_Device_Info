@@ -1,4 +1,4 @@
-name: Device Info Collector.
+name: samfw_super_gofile.
 
 on:
   workflow_dispatch:
