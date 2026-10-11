@@ -1,0 +1,75 @@
+name: Device Info Collector.
+
+on:
+  workflow_dispatch:
+    inputs:
+      STOCK_DEVICE:
+        description: "Your own device model or None"
+        required: true
+        default: "SM-A236E"
+
+      STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK:
+        description: "Input stock device CSC code or direct download link."
+        required: true
+        default: "BKD"
+
+      STOCK_FW_VERSION:
+        description: "Specific Samsung firmware version (PDA/CSC/MODEM) OR (AP/CSC/CP)"
+        required: false
+
+
+jobs:
+  build:
+    name: Start QuantumROM Tools
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v4
+
+      - name: Set variables
+        run: |
+          echo "STOCK_DEVICE=${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK=${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}" | tee -a "$GITHUB_ENV"
+          echo "STOCK_FW_VERSION=${{ inputs.STOCK_FW_VERSION }}" | tee -a "$GITHUB_ENV"
+
+          echo "FIRM_DIR=$(pwd)/FW/${{ inputs.STOCK_DEVICE }}" | tee -a "$GITHUB_ENV"
+          echo "OUT_DIR=$(pwd)/OUT" | tee -a "$GITHUB_ENV"
+          echo "WORK_DIR=$(pwd)/WORK" | tee -a "$GITHUB_ENV"
+          echo "APKTOOL=$(pwd)/bin/java/apktool.jar" | tee -a "$GITHUB_ENV"
+
+      - name: Check disk space
+        id: disk
+        run: |
+          FREE_GB=$(df -BG "$GITHUB_WORKSPACE" | awk 'NR==2 {gsub("G","",$4); print $4}')
+          echo "Free space: ${FREE_GB} GB"
+          echo "enough=$([ "$FREE_GB" -ge 50 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Remove unnecessary files.
+        if: steps.disk.outputs.enough == 'false'
+        uses: rokibhasansagar/slimhub_actions@v25.42.5
+
+      - name: Download firmware ▶️ ${{ inputs.STOCK_DEVICE }} - ${{ inputs.STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK }}
+        run: |
+          source "$(pwd)/scripts/QuantumRom.sh"
+          mkdir -p "$FIRM_DIR" "$OUT_DIR" "$WORK_DIR"
+          DOWNLOAD_FIRMWARE "$STOCK_DEVICE" "$STOCK_DEVICE_CSC_OR_DOWNLOAD_LINK" "$FIRM_DIR" "$STOCK_FW_VERSION"
+
+      - name: Install Dependencies.
+        run: |
+          DEBIAN_FRONTEND=noninteractive sudo apt install -y p7zip-full lz4 liblz4-1 liblz4-dev libzstd1 libzstd-dev build-essential android-sdk-libsparse-utils linux-modules-extra-$(uname -r) \
+              f2fs-tools fuse2fs fuse e2fsprogs python3 python3-pip zipalign unzip openjdk-21-jdk jq perl xxd kmod erofs-utils curl wget
+          sudo modprobe f2fs || true
+
+      - name: Extract firmware
+        run: |
+          source "$(pwd)/scripts/QuantumRom.sh"
+          EXTRACT_FIRMWARE "$FIRM_DIR"
+
+      - name: Create Device ZIP
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        run: |
+          echo "Uploading to GoFile..."
+          GOFILE_LINK=$(bash ./upload.sh "$FIRM_DIR/super.img")
+          echo "🌎 File uploaded here: $GOFILE_LINK"
