@@ -74,6 +74,8 @@ jobs:
           ls -la "$FIRM_DIR"
 
       - name: Extract img and Collect ▶️ ${{ inputs.STOCK_DEVICE }}_Device info.
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
         run: |
           if [ -f "${FIRM_DIR}/system_a.img" ]; then
               export STOCK_HAS_AB_SLOT=TRUE
