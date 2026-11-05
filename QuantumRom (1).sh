@@ -1037,24 +1037,36 @@ PATCH_SSRM() {
     echo " "
 
     if [ "$#" -ne 1 ]; then
-        echo -e "Usage: ${FUNCNAME[0]} <EXTRACTED_SSRM_DIRECTORY>"
+        echo -e "Usage: ${FUNCNAME[0]} <EXTRACTED_FIRM_DIR> <WORK_DIRECTORY>"
         return 1
     fi
 
-    local SSRM_DIR="$1"
-    local FILE="$SSRM_DIR/smali/com/android/server/ssrm/Feature.smali"
+    local EXTRACTED_FIRM_DIR="$1"
+    local FRAMEWORK_DIR="$EXTRACTED_FIRM_DIR/system/system/framework"
     local FOUND
 
     echo -e "Patching SSRM."
-    echo -e "- Patching: $FILE"
+	local ANDROID_VERSION=$(GET_PROP "$EXTRACTED_FIRM_DIR" "system" "ro.system.build.version.release")
+	local SDK_VERSION="$(GET_PROP "$EXTRACTED_FIRM_DIR" "system" "ro.build.version.sdk_full")"
 
-    if [ ! -f "$FILE" ]; then
-        echo "- File name not found: $FILE"
+    if [[ -z "$SDK_VERSION" ]]; then
+        local SDK_VERSION="$(GET_PROP "$EXTRACTED_FIRM_DIR" "system" "ro.build.version.sdk")"
+    fi
+
+	rm -rf "$WORK_DIR/ssrm"
+    INSTALL_FRAMEWORK "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework/framework-res.apk"
+    DECOMPILE "$APKTOOL" "$EXTRACTED_FIRM_DIR/system/system/framework" "$FIRM_DIR/system/system/framework/ssrm.jar" "$WORK_DIR"
+    local SSRM_FILE="$WORK_DIR/ssrm/smali/com/android/server/ssrm/Feature.smali"
+    
+    echo -e "- Patching: $SSRM_FILE"
+
+    if [ ! -f "$SSRM_FILE" ]; then
+        echo "- File name not found: $SSRM_FILE"
         return 1
     fi
 
     if [ -n "$STOCK_DVFS_FILENAME" ]; then
-        if FOUND=$(grep -E 'const-string [vp][0-9]+, "dvfs_policy_[^"]*"' "$FILE" | sed -n '2p'); then
+        if FOUND=$(grep -E 'const-string [vp][0-9]+, "dvfs_policy_[^"]*"' "$SSRM_FILE" | sed -n '2p'); then
             if [ -n "$FOUND" ]; then
                 echo "- Found DVFS policy: $FOUND"
 
@@ -1062,7 +1074,7 @@ PATCH_SSRM() {
                     '0,/dvfs_policy_[^"]*/!{
                         s|(const-string [vp][0-9]+, ")dvfs_policy_[^"]*(")|\1'"$STOCK_DVFS_FILENAME"'\2|
                     }' \
-                    "$FILE"
+                    "$SSRM_FILE"
 
                 echo "- DVFS policy file name replaced to: ${STOCK_DVFS_FILENAME}"
             else
@@ -1078,30 +1090,30 @@ PATCH_SSRM() {
         local SSRM_DEF='ssrm_default'
         local SIOP_DEF='siop_default'
 
-        if FOUND=$(grep -E "const-string [vp][0-9]+, \"${SIOP_FULL}\"" "$FILE"); then
+        if FOUND=$(grep -E "const-string [vp][0-9]+, \"${SIOP_FULL}\"" "$SSRM_FILE"); then
             echo "- Found SIOP policy: $FOUND"
 
             sed -i -E \
                 "s#(const-string [vp][0-9]+, \")${SIOP_FULL}(\")#\1${STOCK_SIOP_POLICY_FILENAME}\2#" \
-                "$FILE"
+                "$SSRM_FILE"
 
             echo "- SIOP policy file name replaced to: ${STOCK_SIOP_POLICY_FILENAME}"
 
-        elif FOUND=$(grep -E "const-string [vp][0-9]+, \"${SSRM_DEF}\"" "$FILE"); then
+        elif FOUND=$(grep -E "const-string [vp][0-9]+, \"${SSRM_DEF}\"" "$SSRM_FILE"); then
             echo "- Found SSRM default policy: $FOUND"
 
             sed -i -E \
                 "s#(const-string [vp][0-9]+, \")${SSRM_DEF}(\")#\1${STOCK_SIOP_POLICY_FILENAME}\2#" \
-                "$FILE"
+                "$SSRM_FILE"
 
             echo "- SSRM default policy file name replaced to: ${STOCK_SIOP_POLICY_FILENAME}"
 
-        elif FOUND=$(grep -E "const-string [vp][0-9]+, \"${SIOP_DEF}\"" "$FILE"); then
+        elif FOUND=$(grep -E "const-string [vp][0-9]+, \"${SIOP_DEF}\"" "$SSRM_FILE"); then
             echo "- Found SIOP default policy: $FOUND"
 
             sed -i -E \
                 "s#(const-string [vp][0-9]+, \")${SIOP_DEF}(\")#\1${STOCK_SIOP_POLICY_FILENAME}\2#" \
-                "$FILE"
+                "$SSRM_FILE"
 
             echo "- SIOP default policy file name replaced to: ${STOCK_SIOP_POLICY_FILENAME}"
 
@@ -1110,6 +1122,13 @@ PATCH_SSRM() {
         fi
     else
         echo "- Stock SIOP policy file name not found."
+    fi
+
+	if awk -v sdk="$SDK_VERSION" 'BEGIN { exit !(sdk > 36) }'; then
+        rm -rf "$WORK_DIR/SamsungDeviceHealthManagerService"
+        java -jar "$APKTOOL" d --force -r -o "$WORK_DIR/SamsungDeviceHealthManagerService" -p "$FRAMEWORK_DIR" \
+            "$EXTRACTED_FIRM_DIR/system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk"
+		SDHMS_CONFIG_FILE="$WORK_DIR/SamsungDeviceHealthManagerService/smali/n5/i0.smali"
     fi
 }
 
