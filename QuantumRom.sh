@@ -1128,12 +1128,38 @@ PATCH_SSRM() {
         echo "- Stock SIOP policy file name not found."
     fi
 
-	if awk -v sdk="$SDK_VERSION" 'BEGIN { exit !(sdk > 36) }'; then
-        rm -rf "$WORK_DIR/SamsungDeviceHealthManagerService"
-        java -jar "$APKTOOL" d --force -r -o "$WORK_DIR/SamsungDeviceHealthManagerService" -p "$FRAMEWORK_DIR" \
-            "$EXTRACTED_FIRM_DIR/system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk"
-		SDHMS_CONFIG_FILE="$WORK_DIR/SamsungDeviceHealthManagerService/smali/n5/i0.smali"
+	if awk -v sdk="$SDK_VERSION" 'BEGIN { exit !(sdk <= 36.1) }' \
+        || [ -z "$STOCK_SIOP_POLICY_FILENAME" ]; then
+        return 0
     fi
+
+	rm -rf "$WORK_DIR/SamsungDeviceHealthManagerService"
+    java -jar "$APKTOOL" d --force -r -o "$WORK_DIR/SamsungDeviceHealthManagerService" -p "$FRAMEWORK_DIR" \
+        "$EXTRACTED_FIRM_DIR/system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk"
+
+	SDHMS_SMALI_FILE="$WORK_DIR/SamsungDeviceHealthManagerService/smali/n5/i0.smali"
+
+    if grep -Fq 'const-string v5, "siop_*_*"' "$SDHMS_SMALI_FILE"; then
+        sed -i 's|const-string v5, "siop_\*_\*"|const-string v5, "'"$STOCK_DVFS_FILENAME"'"|' "$SDHMS_SMALI_FILE"
+    elif grep -Fq 'const-string v2, "ssrm_default"' "$SDHMS_SMALI_FILE"; then
+        sed -i 's|const-string v2, "ssrm_default"|const-string v2, "'"$STOCK_DVFS_FILENAME"'"|' "$SDHMS_SMALI_FILE"
+    else
+        echo "- Error: Siop and ssrm entry line not found!"
+		exit
+    fi
+
+    # Recompile SamsungDeviceHealthManagerService
+	java -jar "$APKTOOL_JAR" b -p "$FRAMEWORK_DIR" -o "$WORK_DIR/SamsungDeviceHealthManagerService-unsigned.apk" \
+	    "$WORK_DIR/SamsungDeviceHealthManagerService"
+
+    # Zipalign SamsungDeviceHealthManagerService.apk
+    "$ZIPALIGN" -f -p 4 "$WORK_DIR/SamsungDeviceHealthManagerService-unsigned.apk" \
+        "$WORK_DIR/SamsungDeviceHealthManagerService-aligned.apk"
+
+	# Sign SamsungDeviceHealthManagerService.apk
+	java -jar "$SIGNAPK_JAR" "$SAMSUNG_CERT" "$SAMSUNG_KEY" "$WORK_DIR/SamsungDeviceHealthManagerService-aligned.apk" \
+        "$WORK_DIR/SamsungDeviceHealthManagerService-signed.apk"
+    echo "- SamsungDeviceHealthManagerService successfully rebuilt and signed!"
 }
 
 
